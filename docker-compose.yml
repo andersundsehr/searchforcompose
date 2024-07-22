@@ -1,0 +1,40 @@
+services:
+  web:
+    image: pluswerk/php-dev:nginx-8.0
+    volumes:
+      - ./src:/app
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ~/.ssh:/home/application/.ssh
+      - ~/.composer/cache:/home/application/.composer/cache
+      - ~/.gitconfig:/home/application/.gitconfig
+      - ../global/.docker/data/global-nginx-proxy/certs:/etc/nginx/certs:ro
+      - ./.docker/config/global-nginx-proxy/additional_nginx.conf:/etc/nginx/conf.d/additional_nginx.conf
+    environment:
+      #     Take a look at VIRTUAL_* in the documentation under Nginx Reverse Proxy
+      - VIRTUAL_HOST=searchforcompose.${TLD_DOMAIN:?TLD_DOMAIN is required}
+      - WEB_DOCUMENT_ROOT=/app/public
+
+      - APPLICATION_UID=${APPLICATION_UID:-1000}
+      - APPLICATION_GID=${APPLICATION_GID:-1000}
+  global-nginx-proxy:
+    image: nginxproxy/nginx-proxy
+    restart: ${RESTART:-unless-stopped}
+    ports:
+      - "${HTTP_PORT:-80}:80"
+      - "${HTTPS_PORT:-443}:443"
+    environment:
+      - HSTS=off
+      - DEFAULT_HOST=searchforcompose.${TLD_DOMAIN:?needed}
+      - TRUST_DOWNSTREAM_PROXY=true
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./.docker/config/global-nginx-proxy/additional_nginx.conf:/etc/nginx/conf.d/additional_nginx.conf
+      - ./.docker/data/global-nginx-proxy/certs:/etc/nginx/certs:ro
+      - ./.docker/data/global-nginx-proxy/dhparam:/etc/nginx/dhparam
+      - ~/src\public\etc\nginx\conf.d
+    labels:
+      - com.github.kanti.local_https.nginx_proxy=true
+networks:
+  default:
+    name: global
+    external: true
