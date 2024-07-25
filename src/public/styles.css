@@ -1,6 +1,7 @@
 * {
     font-family: "Outfit", sans-serif;
 }
+
 body {
     width: auto;
     height: 80vh;
@@ -13,13 +14,30 @@ body {
 .wrapper {
     width: 50%;
     height: auto;
-    background-color: rgb(15,15,15);
+    background-color: rgb(15, 15, 15);
     padding: 1rem;
     border-radius: 0.5rem;
-    border: 3px solid rgb( 255, 230, 51);
-    color: rgb(245,245,245);
+    border: 3px solid rgb(255, 230, 51);
+    color: rgb(245, 245, 245);
 }
 
 .red {
     color: red;
+}
+
+.button {
+    background-color: rgb(253, 25, 140);
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    display: inline-block;
+    height: 40px;
+    line-height: 20px;
+    padding: 10px 16px;
+    text-align: center;
+}
+
+.button:hover,
+.button:focus {
+    background-color: #F082AC;
 }
