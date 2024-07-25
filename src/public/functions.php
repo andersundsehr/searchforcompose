@@ -40,35 +40,37 @@ function checkVirtualHostEqualToServerDomain($virtualHosts, $serverDomain)
 {
     // Check if the virtualhosts array is not empty
     if (isset($virtualHosts)) {
-        echo '<pre>';
-        print_r($virtualHosts);
-        echo '</pre>' . '<br>';
         foreach ($virtualHosts as $vh) {
             // Check if the server domain is equal to the virtualhost. If it is, get the container name and return it
             if ($vh == $serverDomain) {
                 $containerName = trim(shell_exec("sudo docker inspect $(sudo docker ps -aq) --format='{{.Name}} {{.Config.Env}}' | grep 'VIRTUAL_HOST=$vh' | cut -d' ' -f1 | cut -c2- | head -n 1"));
-                echo 'containername: ' . $containerName;
                 return $containerName;
             }
         }
     }
 }
 
-function getProjectName($containerName){
+function getProjectName($containerName)
+{
     $projectName = shell_exec("sudo docker inspect $containerName --format='{{.Config.Labels}}' | grep -oP '(?<=com.docker.compose.project:)[^ ]*'");
-    echo '<br>projektName: ' . $projectName;
     return $projectName;
 }
 
-if(isset($_POST['submit']))
+function listAllContainerOfProject($projectName)
 {
-    startAllContainersOfProject($_POST['projectName']);
+    $allContainers = shell_exec("sudo docker ps -a --filter='label=com.docker.compose.project=$projectName' --format='{{.Names}}'");
+    $containerNames = explode("\n", trim($allContainers));
+    echo "<h3>Start all containers of project $projectName</h3>";
+    echo "<p>all found containers: </p>";
+    echo "<ul><li>" . implode("<li>", $containerNames) . "</ul>";
+    return $containerNames;
 }
-function startAllContainersOfProject($projectName){
+
+function startAllContainersOfProject($projectName)
+{
     $allContainers = shell_exec("sudo docker ps -a --filter='label=com.docker.compose.project=$projectName' --format='{{.Names}}'");
     $containerNames = explode("\n", trim($allContainers));
     foreach ($containerNames as $containerName) {
-        echo $containerName . '<br>';
         shell_exec("sudo docker start $containerName");
     }
 }

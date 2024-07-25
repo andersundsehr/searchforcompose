@@ -1,6 +1,7 @@
 <?php
 //Anschauen: docker restart mit label; inotifywait; Verknüpfung mit nginx proxy, um Zertifikate zu hinterlegen
 // -> wie genau? Ich denke über Volume (siehe mein Versuch) aber muss man noch was machen? Wie kann ich meine Sachen im Volume vom nginx proxy hinterlegen? Gerade im Global
+//Todo: nicht für jede Domain eine Conf-Datei erstellen, sondern eine für alle Domains "searchforcompose.conf"
 $certsDir = '/etc/nginx/certs';
 
 //wie inotifywait in Code einbinden? So richtig?

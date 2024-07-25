@@ -5,21 +5,25 @@ require 'functions.php';
 $virtualHosts = getVirtualHosts();
 $serverDomain = getServerDomain();
 $containerName = checkVirtualHostEqualToServerDomain($virtualHosts, $serverDomain);
-$projectName = getProjectName($containerName);
-
+if($containerName) {
+    $projectName = getProjectName($containerName);
+    $containerNames = listAllContainerOfProject($projectName);
+}
 //Start containers by click on button
 if ($containerName) {
     echo "<!DOCTYPE html>
         <html>
             <head>
-                <title>Starte alle Container</title>
+                <title>Search for Compose</title>
+                <link rel='stylesheet' type='text/css' href='styles.css'>
             </head>
             <body>
-                <h3>Starte alle Container</h3>
-                <form method='post' action='functions.php'>
+            <div class='wrapper'>
+                <form method='post' action='start.php'>
                 <input type='hidden' name='projectName' value='$projectName'>
                 <button type='submit' name='submit'>Start</button>
                 </form>
+                </div>
             </body>
         </html>";
 } else {
@@ -27,10 +31,13 @@ if ($containerName) {
         <html>
             <head>
                 <title>Error</title>
+                <link rel='stylesheet' type='text/css' href='styles.css'>
             </head>
             <body>
-               <h3>Error</h3>
+            <div class='wrapper'>
+               <h3 class='red'>Error</h3>
                <p>Didn't get a container name or virtual host, so couldn't start a container</p>
+                 </div>
             </body>
         </html>";
 }
