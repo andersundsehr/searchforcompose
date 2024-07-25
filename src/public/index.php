@@ -9,6 +9,7 @@ if($containerName) {
     $projectName = getProjectName($containerName);
     $containerNames = listAllContainerOfProject($projectName);
 }
+
 //Start containers by click on button
 if ($containerName) {
     echo "<!DOCTYPE html>

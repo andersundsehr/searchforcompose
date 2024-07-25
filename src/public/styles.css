@@ -1,3 +1,14 @@
+:root {
+    --yellow: rgb(255, 230, 51);
+    --red: red;
+    --pink: rgb(253, 25, 140);
+    --grey: grey;
+    --black: rgb(15, 15, 15);
+    --whitegrey: rgb(245, 245, 245);
+    --babypink:  #F082AC;
+    --white: white;
+}
+
 * {
     font-family: "Outfit", sans-serif;
 }
@@ -8,27 +19,27 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: black;
+    background-color: var(--grey);
 }
 
 .wrapper {
     width: 50%;
     height: auto;
-    background-color: rgb(15, 15, 15);
+    background-color: var(--black);
     padding: 1rem;
     border-radius: 0.5rem;
-    border: 3px solid rgb(255, 230, 51);
-    color: rgb(245, 245, 245);
+    border: 3px solid var(--yellow);
+    color: var(--whitegrey);
 }
 
 .red {
-    color: red;
+    color: var(--red);
 }
 
 .button {
-    background-color: rgb(253, 25, 140);
+    background-color: var(--pink);
     border-radius: 8px;
-    color: white;
+    color: var(--white);
     cursor: pointer;
     display: inline-block;
     height: 40px;
@@ -39,5 +50,5 @@ body {
 
 .button:hover,
 .button:focus {
-    background-color: #F082AC;
+    background-color: var(--babypink);
 }
