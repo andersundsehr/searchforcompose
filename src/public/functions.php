@@ -20,7 +20,7 @@ function getVirtualHosts()
             // Trim the virtual hosts and add them to the virtualHosts
             foreach ($virtualHostsParts as $vh) {
                 //skip empty virtual hosts
-                if(trim($vh) === '') continue;
+                if (trim($vh) === '') continue;
                 $virtualHosts[] = trim($vh);
             }
         }
@@ -60,9 +60,6 @@ function listAllContainerOfProject($projectName)
 {
     $allContainers = shell_exec("sudo docker ps -a --filter='label=com.docker.compose.project=$projectName' --format='{{.Names}}'");
     $containerNames = explode("\n", trim($allContainers));
-    echo "<h3>Start all containers of project $projectName</h3>";
-    echo "<p>all found containers: </p>";
-    echo "<ul><li>" . implode("<li>", $containerNames) . "</ul>";
     return $containerNames;
 }
 

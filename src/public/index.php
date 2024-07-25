@@ -19,9 +19,12 @@ if ($containerName) {
             </head>
             <body>
             <div class='wrapper'>
-                <form method='post' action='start.php'>
+                <h3>Start all containers of project <em>$projectName</em></h3>
+                <p>All found containers: </p>
+                <ul><li>" . implode("<li>", $containerNames) . "</ul></p>
+                <form method='post' action=''>
                 <input type='hidden' name='projectName' value='$projectName'>
-                <button type='submit' name='submit'>Start</button>
+                <button class='button' type='submit' name='submit'>Start</button>
                 </form>
                 </div>
             </body>
@@ -36,8 +39,16 @@ if ($containerName) {
             <body>
             <div class='wrapper'>
                <h3 class='red'>Error</h3>
-               <p>Didn't get a container name or virtual host, so couldn't start a container</p>
+               <p>Didn't find the virtual host <b>$serverDomain</b>, so couldn't start the containers for it</p>
+               <p>Virtual Hosts found instead:</p>
+               <ul><li>" . implode("<li>", $virtualHosts) . "</ul>
                  </div>
             </body>
         </html>";
+}
+
+//Start all containers of project
+if(isset($_POST['submit']))
+{
+    startAllContainersOfProject($_POST['projectName']);
 }
