@@ -7,8 +7,9 @@ $certsDir = '/etc/nginx/certs';
 
 //wie inotifywait in Code einbinden? So richtig?
 while (true) {
-    $inotifyCommand = "inotifywait -m -e create,modify --format '%w%f' $certsDir";
-    $output = shell_exec($inotifyCommand);
+//    $inotifyCommand = "inotifywait -m -e create,modify --format '%w%f' $certsDir";
+//    //$inotifyCommand hat kein output!
+//    $output = shell_exec($inotifyCommand);
 
     $certFiles = scandir($certsDir);
     foreach ($certFiles as $cert) {
@@ -30,16 +31,17 @@ proxy_pass http://searchforcompose.vm17.iveins.de;
 }
 }";
 
-        $nginxConfFile = "etc/nginx/conf.d/$domain.conf";
+        $nginxConfFile = "etc/nginx/conf.d/searchforcompose.conf";
         file_put_contents($nginxConfFile, $nginxConfig);
-
-//Fehler: ich möchte nginx proxy restarten
-        $result = shell_exec('docker ps -f "label=com.github.kanti.local_https.nginx_proxy" -q');
-        if (!$result) {
-            throw new Exception('ERROR NginxProxy Not found. did you not set the label=com.github.kanti.local_https.nginx_proxy on jwilder/nginx-proxy');
-        } else {
-            $result = shell_exec("docker restart %s");
-            $this->output->writeln($result . PHP_EOL . '<info>Nginx Restarted.</info>');
-        }
     }
 }
+//Fehler: ich möchte nginx proxy restarten
+//        $result = shell_exec('docker ps -f "label=com.github.kanti.local_https.nginx_proxy" -q');
+//        if (!$result) {
+//            throw new Exception('ERROR NginxProxy Not found. did you not set the label=com.github.kanti.local_https.nginx_proxy on jwilder/nginx-proxy');
+//        } else {
+//            $result = shell_exec("docker restart %s");
+//            $this->output->writeln($result . PHP_EOL . '<info>Nginx Restarted.</info>');
+//        }
+//    }
+//}

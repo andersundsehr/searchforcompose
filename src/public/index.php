@@ -1,33 +1,6 @@
 <?php
 
 require 'functions.php';
-$certsDir = '/etc/nginx/certs';
-
-
-$certFiles = scandir($certsDir);
-foreach ($certFiles as $cert) {
-    if ($cert == '.' || $cert == '..') continue;
-    $domain = pathinfo($cert, PATHINFO_FILENAME);
-
-    $nginxConfig = "server {
-server_name *.$domain;
-access_log /var/log/nginx/access.log vhost;
-http2 on;
-listen 443 ssl ;
-ssl_session_timeout 5m;
-ssl_session_cache shared:SSL:50m;
-ssl_session_tickets off;
-ssl_certificate /etc/nginx/certs/$domain.crt;
-ssl_certificate_key /etc/nginx/certs/$domain.key;
-location / {
-proxy_pass http://searchforcompose.vm17.iveins.de;
-}
-}";
-
-    $nginxConfFile = "etc/nginx/conf.d/searchforcompose.conf";
-    file_put_contents($nginxConfFile, $nginxConfig);
-}
-
 
 $virtualHosts = getVirtualHosts();
 $serverDomain = getServerDomain();
@@ -76,7 +49,7 @@ if ($containerName) {
 }
 
 //Start all containers of project
-if(isset($_POST['submit']))
-{
+if (isset($_POST['submit'])) {
     startAllContainersOfProject($_POST['projectName']);
 }
+generateConfFile();
