@@ -3,7 +3,7 @@
 set -euo pipefail
 
 function generateNginxConfig() {
-  php /app/public/generateNginxConfig.php
+  php /app/generateNginxConfig.php
 }
 
 while true; do

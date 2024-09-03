@@ -72,8 +72,3 @@ function startAllContainersOfProject($projectName)
     }
 
 }
-
-function restartNginx()
-{
-    shell_exec("sudo docker restart $(sudo docker ps -f 'label=com.github.kanti.local_https.nginx_proxy' -q)");
-}

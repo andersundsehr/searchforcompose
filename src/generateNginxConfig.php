@@ -1,5 +1,7 @@
 <?php
+
 $nginxConfFile = "/searchforcompose.conf";
+$oldConfig = file_get_contents($nginxConfFile);
 $certsDir = '/certs';
 $certFiles = scandir($certsDir);
 
@@ -23,6 +25,19 @@ foreach ($certFiles as $cert) {
                 }
             }
             ";
-
 }
-file_put_contents($nginxConfFile, $nginxConfig);
+
+//nginx proxy nich restarten wenn nichts geändert wurde
+if($oldConfig === $nginxConfig){
+    echo "\033[32m" . "Nginx config file did not change" . "\033[0m" . PHP_EOL;
+    exit(0);
+} else {
+    file_put_contents($nginxConfFile, $nginxConfig);
+    echo "\033[32m" . "Nginx config file generated successfully" . "\033[0m" . PHP_EOL;
+
+    if(passthru("sudo docker restart $(sudo docker ps -f 'label=com.github.kanti.local_https.nginx_proxy' -q)") === false){
+        echo "\033[31m" . "Nginx restart failed" . "\033[0m" . PHP_EOL;
+        exit(1);
+    }
+    echo "\033[32m" . "Nginx restarted successfully" . "\033[0m" . PHP_EOL;
+}
