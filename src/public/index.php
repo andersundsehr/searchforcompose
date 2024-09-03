@@ -48,8 +48,6 @@ if ($containerName) {
         </html>";
 }
 
-//Start all containers of project
 if (isset($_POST['submit'])) {
     startAllContainersOfProject($_POST['projectName']);
 }
-generateConfFile();
