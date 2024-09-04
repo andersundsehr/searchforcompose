@@ -6,26 +6,25 @@ function getVirtualHosts()
     // Convert the string of container IDs into an array
     $container_ids_array = explode("\n", trim($all_container_ids));
     // Initialize an array to hold virtual hosts
-    $virtualHosts = [];
+    $virtualHosts = array();
 
     // Check if the container ids array is set and is not NULL
     if (isset($container_ids_array)) {
-
         // Iterate over all container ids and save the virtualhost in container_virtualhosts
         foreach ($container_ids_array as $container_id) {
             // Get the virtual host from the container
-            $virtualHostsRaw = shell_exec("sudo docker inspect $container_id --format='{{.Config.Env}}' | grep -oP 'VIRTUAL_HOST=\K[^ ]*'");
+            $virtualHostsRaw = shell_exec("sudo docker inspect $container_id --format='{{.Config.Env}}' | awk -F'VIRTUAL_HOST=' '{print $2}' | awk '{print $1}'");
             // Split multiple virtual hosts if there are commas
             $virtualHostsParts = preg_split('/,/', trim($virtualHostsRaw));
             // Trim the virtual hosts and add them to the virtualHosts
             foreach ($virtualHostsParts as $vh) {
                 //skip empty virtual hosts
-                if (trim($vh) === '') continue;
-                $virtualHosts[] = trim($vh);
+                if (trim($vh) === '') {continue;}
+                $vh = trim($vh);
+                array_push($virtualHosts, $vh);
             }
         }
     }
-
     return $virtualHosts;
 }
 
@@ -52,7 +51,7 @@ function checkVirtualHostEqualToServerDomain($virtualHosts, $serverDomain)
 
 function getProjectName($containerName)
 {
-    $projectName = shell_exec("sudo docker inspect $containerName --format='{{.Config.Labels}}' | grep -oP '(?<=com.docker.compose.project:)[^ ]*'");
+    $projectName = shell_exec("sudo docker inspect $containerName --format='{{.Config.Labels}}' | awk -F'com.docker.compose.project:' '{split(\$2, a, \" \"); print a[1]}'");
     return $projectName;
 }
 

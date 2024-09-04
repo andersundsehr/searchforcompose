@@ -1,6 +1,6 @@
 services:
   web:
-    image: pluswerk/php-dev:nginx-8.2-alpine
+    image: pluswerk/php-dev:nginx-8.0-alpine
     build:
       context: .
       dockerfile: docker/Dockerfile
