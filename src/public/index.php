@@ -10,6 +10,13 @@ if ($containerName) {
     $containerNames = listAllContainerOfProject($projectName);
 }
 
+if (isset($_POST['submit'])) {
+    startAllContainersOfProject($_POST['projectName']);
+    header("Location: /");
+    header('Status: 302 Found');
+    exit;
+}
+
 //Start containers by click on button
 if ($containerName) {
     echo "<!DOCTYPE html>
@@ -24,8 +31,8 @@ if ($containerName) {
                 <p>All found containers: </p>
                 <ul><li>" . implode("<li>", $containerNames) . "</ul></p>
                 <form method='post' action=''>
-                <input type='hidden' name='projectName' value='$projectName'>
-                <button class='button' type='submit' name='submit'>Start</button>
+                    <input type='hidden' name='projectName' value='$projectName'>
+                    <button class='button' type='submit' name='submit'>Start</button>
                 </form>
                 </div>
             </body>
@@ -46,8 +53,4 @@ if ($containerName) {
                  </div>
             </body>
         </html>";
-}
-
-if (isset($_POST['submit'])) {
-    startAllContainersOfProject($_POST['projectName']);
 }

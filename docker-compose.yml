@@ -1,9 +1,8 @@
 services:
   web:
-    image: pluswerk/php-dev:nginx-8.0-alpine
     build:
       context: .
-      dockerfile: docker/Dockerfile
+      dockerfile: docker/development.Dockerfile
     volumes:
       - ./src:/app
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -12,6 +11,7 @@ services:
       - ~/.gitconfig:/home/application/.gitconfig
       - ../global/.docker/data/global-nginx-proxy/certs:/certs:ro
       - ../global/.docker/data/global-nginx-proxy/searchforcompose.conf:/searchforcompose.conf
+      - ./src/supervisor.d/searchForCompose.conf:/opt/docker/etc/supervisor.d/searchForCompose.conf
     environment:
       #     Take a look at VIRTUAL_* in the documentation under Nginx Reverse Proxy
       - VIRTUAL_HOST=searchforcompose.${TLD_DOMAIN:?TLD_DOMAIN is required}
