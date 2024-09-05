@@ -3,11 +3,14 @@ $certsDir = '/certs';
 $certFiles = scandir($certsDir);
 
 $newConfig = '';
+echo PHP_EOL . "\033[32m" . "Certificates : " . "\033[0m" . PHP_EOL;
 foreach ($certFiles as $cert) {
     if ($cert == '.' || $cert == '..') continue;
     if (pathinfo($cert, PATHINFO_EXTENSION) !== 'crt') continue;
     if ($cert === 'default.crt') continue;
     $domain = pathinfo($cert, PATHINFO_FILENAME);
+    echo PHP_EOL . "\033[32m" . "- " . $domain . "\033[0m" . PHP_EOL;
+    $virtualHost = getenv('VIRTUAL_HOST') ?: throw new \Exception('env VIRTUAL_HOST is required');
     $newConfig .= "
 server {
   server_name *.$domain;
@@ -20,14 +23,14 @@ server {
   ssl_certificate /etc/nginx/certs/$domain.crt;
   ssl_certificate_key /etc/nginx/certs/$domain.key;
   location / {
-    proxy_pass http://searchforcompose.vm17.iveins.de;
+    proxy_pass http://$virtualHost;
     }
   }
   ";
 }
 
 $nginxConfFile = "/searchforcompose.conf";
-//nginx proxy nich restarten wenn nichts geändert wurde
+//only restart nginx if the config file has changed
 $oldConfig = file_get_contents($nginxConfFile);
 if ($oldConfig === $newConfig) {
     echo PHP_EOL . "\033[32m" . "Nginx config file did not change" . "\033[0m" . PHP_EOL;
