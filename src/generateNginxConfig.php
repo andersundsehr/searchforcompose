@@ -3,11 +3,13 @@ $certsDir = '/certs';
 $certFiles = scandir($certsDir);
 
 $newConfig = '';
+echo PHP_EOL . "\033[32m" . "Certificates : " . "\033[0m" . PHP_EOL;
 foreach ($certFiles as $cert) {
     if ($cert == '.' || $cert == '..') continue;
     if (pathinfo($cert, PATHINFO_EXTENSION) === 'crt') continue;
     if ($cert === 'default.crt') continue;
     $domain = pathinfo($cert, PATHINFO_FILENAME);
+    echo PHP_EOL . "\033[32m" . "- " . $domain . "\033[0m" . PHP_EOL;
     $virtualHost = getenv('VIRTUAL_HOST');
     $newConfig .= "
 server {
