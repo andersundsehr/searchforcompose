@@ -5,7 +5,7 @@
     --grey: grey;
     --black: rgb(15, 15, 15);
     --lightgrey: rgb(245, 245, 245);
-    --babypink:  #F082AC;
+    --babypink: #F082AC;
     --white: white;
 }
 
@@ -51,4 +51,8 @@ body {
 .button:hover,
 .button:focus {
     background-color: var(--babypink);
+}
+
+.link {
+    text-decoration: none;
 }

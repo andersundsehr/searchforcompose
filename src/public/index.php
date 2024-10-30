@@ -49,7 +49,7 @@ if ($containerName) {
                <h3 class='red'>Error</h3>
                <p>Didn't find the virtual host <b>$serverDomain</b>, so couldn't start the containers for it</p>
                <p>Virtual Hosts found instead:</p>
-               <ul><li>" . implode("<li>", $virtualHosts) . "</ul>
+               <ul><ul><li>" . implode("</li><li>", array_map(fn($virtualHosts) => "<a class='link' href='http://$virtualHosts' target='_blank'>$virtualHosts</a>", $virtualHosts)) . "</li></ul>
                  </div>
             </body>
         </html>";
