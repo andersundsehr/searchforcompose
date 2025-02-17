@@ -23,7 +23,7 @@ if ($containerName) {
         <html>
             <head>
                 <title>Search for Compose</title>
-                <link rel='stylesheet' type='text/css' href='styles.css'>
+                <link rel='stylesheet' type='text/css' href='/styles.css'>
             </head>
             <body>
             <div class='wrapper'>
@@ -42,7 +42,7 @@ if ($containerName) {
         <html>
             <head>
                 <title>Error</title>
-                <link rel='stylesheet' type='text/css' href='styles.css'>
+                <link rel='stylesheet' type='text/css' href='/styles.css'>
             </head>
             <body>
             <div class='wrapper'>
