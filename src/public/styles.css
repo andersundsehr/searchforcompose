@@ -14,11 +14,11 @@
 }
 
 body {
-    width: auto;
     min-height: 100vh;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
+    padding: 50px 0;
     background-color: light-dark(var(--grey), black);
 }
 
