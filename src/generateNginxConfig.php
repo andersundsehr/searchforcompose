@@ -5,10 +5,24 @@ $certFiles = scandir($certsDir);
 $newConfig = '';
 echo PHP_EOL . "\033[32m" . "Certificates : " . "\033[0m" . PHP_EOL;
 foreach ($certFiles as $cert) {
-    if ($cert == '.' || $cert == '..') continue;
-    if (pathinfo($cert, PATHINFO_EXTENSION) !== 'crt') continue;
-    if ($cert === 'default.crt') continue;
+    if ($cert === '.' || $cert === '..') {
+        continue;
+    }
+    if (pathinfo($cert, PATHINFO_EXTENSION) !== 'crt') {
+        continue;
+    }
+    if ($cert === 'default.crt') {
+        continue;
+    }
+
     $domain = pathinfo($cert, PATHINFO_FILENAME);
+    $certificateFile = "$certsDir/$domain.crt";
+    $certificateKeyFile = "$certsDir/$domain.key";
+    if (!is_file($certificateFile) || !is_file($certificateKeyFile)) {
+        echo PHP_EOL . "\033[33m" . "- skipped incomplete certificate pair for " . $domain . "\033[0m" . PHP_EOL;
+        continue;
+    }
+
     echo PHP_EOL . "\033[32m" . "- " . $domain . "\033[0m" . PHP_EOL;
     $virtualHost = getenv('VIRTUAL_HOST') ?: throw new \Exception('env VIRTUAL_HOST is required');
     $newConfig .= "
@@ -37,7 +51,9 @@ if ($oldConfig === $newConfig) {
     exit(0);
 }
 
-file_put_contents($nginxConfFile, $newConfig);
+$temporaryConfigFile = $nginxConfFile . '.tmp';
+file_put_contents($temporaryConfigFile, $newConfig);
+rename($temporaryConfigFile, $nginxConfFile);
 echo PHP_EOL ."\033[32m" . "Nginx config file generated successfully" . "\033[0m" . PHP_EOL;
 
 if (passthru("sudo docker restart $(sudo docker ps -f 'label=com.github.kanti.local_https.nginx_proxy' -q)") === false) {
