@@ -17,6 +17,13 @@ into your browser. This service will pop up, and with just one click on the star
 associated with the project will be launched. This eliminates the need to manually start the containers through the
 console, saving you time and effort.
 
+## PHP runtime
+
+Production and development containers use PHP 8.5 by default. To build the
+previous PHP 8.3 runtime locally, use `PHP_VERSION=8.3 docker compose build`.
+For the production Dockerfile, use `docker build --build-arg PHP_VERSION=8.3 .`.
+Both PHP 8.3 and PHP 8.5 syntax checks run in CI, alongside the container build.
+
 ### Where you can find it too
 
 * github.com/andersundsehr
