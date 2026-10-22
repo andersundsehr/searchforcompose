@@ -5,10 +5,25 @@ on:
     # build every first of the month
     - cron: '0 0 1 * *'
   push:
+  pull_request:
   workflow_dispatch:
 
 
 jobs:
+  php:
+    name: PHP ${{ matrix.php }} syntax
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.3', '8.5']
+    steps:
+      - uses: actions/checkout@v6
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+      - run: find src -name '*.php' -print0 | xargs -0 -n 1 php -l
+
   docker:
     runs-on: ubuntu-latest
     steps:
@@ -23,6 +38,7 @@ jobs:
         run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
       -
         name: Login to Github
+        if: github.ref == 'refs/heads/main'
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
@@ -30,6 +46,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       -
         name: Login to DockerHub
+        if: github.ref == 'refs/heads/main'
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
