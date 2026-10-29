@@ -1,5 +1,4 @@
-ARG PHP_VERSION=8.5
-FROM ghcr.io/pluswerk/php-dev:nginx-${PHP_VERSION}-alpine
+FROM ghcr.io/pluswerk/php-dev:nginx-8.5-alpine
 WORKDIR /app
 RUN apk add inotify-tools
 

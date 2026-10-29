@@ -3,8 +3,6 @@ services:
     build:
       context: .
       dockerfile: docker/development.Dockerfile
-      args:
-        PHP_VERSION: ${PHP_VERSION:-8.5}
     volumes:
       - ./src:/app
       - /var/run/docker.sock:/var/run/docker.sock:ro
